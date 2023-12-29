@@ -10,14 +10,12 @@ const userSchema = z.object({
     .string()
     .min(1, "Password is required")
     .min(8, "Password must have than 8 characters"),
-  confirmPassword: z.string().min(1, "Password confirmation is required"),
-  name: z.string().min(1, "Name is required").max(100),
 });
 
 export async function POST(req: Request) {
   try {
     const body = await req.json();
-    const { email, username, name, password } = userSchema.parse(body);
+    const { email, username, password } = userSchema.parse(body);
 
     // email and username must be unique
     const existingUserByEmail = await db.user.findUnique({
@@ -43,7 +41,6 @@ export async function POST(req: Request) {
       data: {
         email,
         username,
-        name,
         password: encryptedPassword,
       },
     });
@@ -53,9 +50,6 @@ export async function POST(req: Request) {
       { status: 201 }
     );
   } catch (e) {
-    return NextResponse.json(
-      { message: "Something went wrong" },
-      { status: 500 }
-    );
+    return NextResponse.json({ message: e }, { status: 500 });
   }
 }
