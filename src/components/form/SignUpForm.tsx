@@ -62,6 +62,7 @@ const SignUpForm = () => {
       console.log(data);
     } else {
       console.log("erro");
+      console.log(response);
     }
   };
 

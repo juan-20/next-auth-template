@@ -16,6 +16,8 @@ import { Button } from "../ui/button";
 import Link from "next/link";
 import GoogleSignInButton from "../GoogleSignInButton";
 import { signIn } from "next-auth/react";
+import { Toaster, toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 const FormSchema = z.object({
   email: z.string().min(1, "Email is required").email("Invalid email"),
@@ -26,6 +28,7 @@ const FormSchema = z.object({
 });
 
 const SignInForm = () => {
+  const router = useRouter();
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
@@ -40,11 +43,19 @@ const SignInForm = () => {
       email: values.email,
       password: values.password,
     });
-    console.log(signInResponse);
+    if (!signInResponse?.error) {
+      router.refresh();
+      router.push("/profile");
+    } else {
+      toast.error("Error", {
+        description: "Password or email incorrect",
+      });
+    }
   };
 
   return (
     <Form {...form}>
+      <Toaster richColors position="top-right" />
       <form onSubmit={form.handleSubmit(onSubmit)} className="w-full">
         <div className="space-y-2">
           <FormField
