@@ -15,6 +15,7 @@ import {
 import { useTheme } from "next-themes";
 import { signOut } from "next-auth/react";
 import { SignoutButtonNavBar } from "./signoutButton";
+import User from "./user";
 
 type Checked = DropdownMenuCheckboxItemProps["checked"];
 
@@ -32,7 +33,9 @@ export function ProfileDropdowMenu() {
         <Button variant="outline">Open</Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56">
-        <DropdownMenuLabel>Appearance</DropdownMenuLabel>
+        <DropdownMenuLabel>
+          <User />
+        </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <SignoutButtonNavBar />
         <DropdownMenuCheckboxItem
